@@ -12,7 +12,8 @@
   <style>
     :root {
       --bg: #0f172a; --card: #1e293b; --border: #334155; --input: #0f172a;
-      --text: #f8fafc; --muted: #94a3b8; --primary: #3b82f6;
+      --text: #f8fafc; --muted: #94a3b8; --primary: #3b82f6; --gold: #f59e0b;
+      --win: #10b981; --loss: #ef4444;
       --eternity: #c4b5fd; --nature: #4ade80; --honor: #bae6fd;
       --chaos: #fb7185; --progress: #38bdf8; --mystery: #e879f9;
     }
@@ -23,35 +24,57 @@
     .app-title { display: flex; align-items: center; gap: 10px; cursor: pointer; }
     .app-title img { width: 38px; height: 38px; border-radius: 10px; object-fit: cover; border: 1px solid var(--border); }
     .title-text h1 { font-size: 1.15rem; font-weight: 800; line-height: 1.1; }
-    .guild-subtitle { font-size: 0.75rem; color: #f59e0b; font-weight: 700; margin-top: 2px; }
+    .guild-subtitle { font-size: 0.75rem; color: var(--gold); font-weight: 700; margin-top: 2px; }
     .backup-btns { display: flex; gap: 5px; }
     .btn-small { background: var(--card); color: var(--muted); border: 1px solid var(--border); padding: 6px 9px; border-radius: 8px; font-size: 0.72rem; font-weight: 600; cursor: pointer; }
-    .search-box { position: relative; margin-bottom: 14px; }
+    .search-box { position: relative; margin-bottom: 12px; }
     .search-box input { width: 100%; background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 11px 36px 11px 14px; border-radius: 10px; font-size: 0.95rem; outline: none; }
     .clear-search { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--muted); font-size: 1.1rem; cursor: pointer; display: none; }
-    .all-factions-btn { width: 100%; background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 14px; border-radius: 12px; font-size: 1rem; font-weight: 700; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; cursor: pointer; }
+    .quick-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+    .quick-btn { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 12px 10px; border-radius: 12px; font-size: 0.88rem; font-weight: 700; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    .quick-btn.team-check { background: linear-gradient(135deg, rgba(59,130,246,0.22), rgba(16,185,129,0.18)); border-color: rgba(59,130,246,0.5); }
+    .quick-btn.fav-btn { border-color: rgba(245,158,11,0.45); }
+    .all-factions-btn { width: 100%; background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 12px 14px; border-radius: 12px; font-size: 0.95rem; font-weight: 700; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; cursor: pointer; }
     .faction-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .faction-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px 14px; cursor: pointer; display: flex; flex-direction: column; justify-content: space-between; min-height: 86px; }
-    .faction-name { font-size: 1.05rem; font-weight: 800; display: flex; align-items: center; gap: 6px; }
-    .faction-count { font-size: 0.78rem; color: var(--muted); margin-top: 6px; font-weight: 600; }
+    .faction-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 15px 14px; cursor: pointer; display: flex; flex-direction: column; justify-content: space-between; min-height: 82px; }
+    .faction-name { font-size: 1.02rem; font-weight: 800; display: flex; align-items: center; gap: 6px; }
+    .faction-count { font-size: 0.76rem; color: var(--muted); margin-top: 5px; font-weight: 600; }
     .nav-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
     .back-btn { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 7px 12px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer; }
     .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    .section-header h2 { font-size: 1.2rem; font-weight: 800; }
+    .section-header h2 { font-size: 1.15rem; font-weight: 800; }
     .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-    .hero-item { background: var(--card); border: 1px solid var(--border); border-radius: 11px; padding: 12px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-    .hero-item-name { font-weight: 700; font-size: 0.94rem; }
-    .note-dot { width: 8px; height: 8px; border-radius: 50%; background: #10b981; flex-shrink: 0; }
+    .hero-item { background: var(--card); border: 1px solid var(--border); border-radius: 11px; padding: 11px 10px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 4px; }
+    .hero-item-name { font-weight: 700; font-size: 0.9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .hero-badges { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
+    .star-mini { color: var(--gold); font-size: 0.85rem; }
+    .note-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--win); }
     .detail-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; }
-    .detail-top { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 14px; }
+    .detail-top { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 14px; }
     .detail-hero-name { font-size: 1.35rem; font-weight: 800; }
     .detail-faction-label { font-size: 0.78rem; color: var(--muted); margin-top: 2px; font-weight: 600; }
-    .info-block { margin-bottom: 14px; }
+    .star-toggle { background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.4); color: var(--gold); padding: 6px 11px; border-radius: 10px; font-size: 1.15rem; cursor: pointer; }
+    .info-block { margin-bottom: 13px; }
     .info-block:last-child { margin-bottom: 0; }
-    .info-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); font-weight: 700; margin-bottom: 5px; }
-    .info-content { background: rgba(15, 23, 42, 0.55); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; font-size: 0.9rem; color: #e2e8f0; line-height: 1.5; white-space: pre-wrap; min-height: 40px; }
+    .info-label { font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); font-weight: 700; margin-bottom: 5px; }
+    .info-content { background: rgba(15, 23, 42, 0.55); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; font-size: 0.9rem; color: #e2e8f0; line-height: 1.5; white-space: pre-wrap; min-height: 38px; }
     .info-empty { color: #64748b; font-style: italic; }
-    .hero-link { color: #60a5fa; font-weight: 700; text-decoration: underline; cursor: pointer; }
+    .hero-link { font-weight: 700; text-decoration: underline; cursor: pointer; }
+    .backlink-row { margin-bottom: 5px; font-size: 0.86rem; }
+    .backlink-row:last-child { margin-bottom: 0; }
+    .backlink-tag { color: var(--muted); font-size: 0.75rem; font-weight: 700; }
+    /* Team Check Styles */
+    .tc-box { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; margin-bottom: 12px; }
+    .tc-inputs { display: grid; grid-template-columns: 1fr; gap: 7px; margin: 10px 0; }
+    .tc-result-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; margin-bottom: 10px; }
+    .tc-result-card.good { border-color: rgba(16,185,129,0.45); }
+    .tc-result-card.bad { border-color: rgba(239,68,68,0.45); }
+    .tc-title { font-size: 0.88rem; font-weight: 800; margin-bottom: 8px; }
+    .tc-title.good { color: var(--win); }
+    .tc-title.bad { color: var(--loss); }
+    .tc-chip { display: inline-flex; align-items: center; gap: 5px; background: rgba(15,23,42,0.7); border: 1px solid var(--border); padding: 6px 10px; border-radius: 8px; margin: 0 6px 6px 0; font-size: 0.84rem; font-weight: 700; cursor: pointer; }
+    .tc-chip.fav { border-color: var(--gold); background: rgba(245,158,11,0.12); }
+    .tc-reason { font-size: 0.72rem; color: var(--muted); font-weight: 500; }
     .fab { position: fixed; bottom: 20px; right: 20px; left: 20px; max-width: 560px; margin: 0 auto; background: var(--primary); color: #fff; border: none; padding: 14px; border-radius: 14px; font-size: 1rem; font-weight: 700; box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.4); cursor: pointer; z-index: 10; }
     .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.82); display: none; justify-content: center; align-items: flex-start; overflow-y: auto; padding: 12px; z-index: 50; }
     .modal-overlay.open { display: flex; }
@@ -61,8 +84,8 @@
     .form-group { margin-bottom: 12px; }
     label { display: block; font-size: 0.78rem; color: var(--muted); margin-bottom: 4px; font-weight: 600; }
     input[type="text"], select, textarea { width: 100%; background: var(--input); border: 1px solid var(--border); color: var(--text); padding: 10px; border-radius: 8px; font-size: 0.92rem; outline: none; font-family: inherit; }
-    textarea { min-height: 70px; resize: vertical; }
-    .save-btn { width: 100%; background: #10b981; color: #052e16; border: none; padding: 13px; border-radius: 10px; font-size: 1rem; font-weight: 800; cursor: pointer; margin-top: 6px; }
+    textarea { min-height: 68px; resize: vertical; }
+    .save-btn { width: 100%; background: var(--win); color: #052e16; border: none; padding: 13px; border-radius: 10px; font-size: 1rem; font-weight: 800; cursor: pointer; margin-top: 6px; }
   </style>
 </head>
 <body>
@@ -135,6 +158,7 @@
     </form>
   </div>
 </div>
+<datalist id="allHeroesDatalist"></datalist>
 <script>
   const CODEX_KEY = 'gaben_codex_v1';
   const FACTIONS = [
@@ -147,37 +171,31 @@
   ];
 
   const DEFAULT_HEROES = [
-    // Eternity
     { name: 'Iris', faction: 'Eternity' }, { name: 'Electra von Grave', faction: 'Eternity' },
     { name: 'Tempus', faction: 'Eternity' }, { name: 'Drayne', faction: 'Eternity' },
     { name: 'Dante', faction: 'Eternity' }, { name: 'Octavia', faction: 'Eternity' },
     { name: 'Phobos', faction: 'Eternity' }, { name: 'Faceless', faction: 'Eternity' },
     { name: 'Corvus', faction: 'Eternity' }, { name: 'Morrigan', faction: 'Eternity' },
-    // Nature
     { name: 'Byrna', faction: 'Nature' }, { name: 'Yasmine', faction: 'Nature' },
     { name: 'Leonel', faction: 'Nature' }, { name: 'Mushy and Shroom', faction: 'Nature' },
     { name: 'Wodryn', faction: 'Nature' }, { name: 'Oya', faction: 'Nature' },
     { name: 'Alvanor', faction: 'Nature' }, { name: 'Mojo', faction: 'Nature' },
     { name: 'Maya', faction: 'Nature' }, { name: 'Aurora', faction: 'Nature' },
-    // Honor
     { name: 'Crow', faction: 'Honor' }, { name: 'Soleil', faction: 'Honor' },
     { name: 'Guus', faction: 'Honor' }, { name: 'Artemis', faction: 'Honor' },
     { name: 'Qing Mao', faction: 'Honor' }, { name: 'Fafnir', faction: 'Honor' },
     { name: 'Galahad', faction: 'Honor' }, { name: 'Tristan', faction: 'Honor' },
     { name: 'Markus', faction: 'Honor' }, { name: 'Luther', faction: 'Honor' },
-    // Chaos
     { name: 'Peech', faction: 'Chaos' }, { name: 'Aidan', faction: 'Chaos' },
     { name: 'Cleaver', faction: 'Chaos' }, { name: 'Astaroth', faction: 'Chaos' },
     { name: 'Jorgen', faction: 'Chaos' }, { name: 'Kayla', faction: 'Chaos' },
     { name: 'Dorian', faction: 'Chaos' }, { name: "Xe'Sha", faction: 'Chaos' },
     { name: 'Lilith', faction: 'Chaos' }, { name: 'Kai', faction: 'Chaos' },
-    // Progress
     { name: 'Nebula', faction: 'Progress' }, { name: 'Julius', faction: 'Progress' },
     { name: 'Polaris', faction: 'Progress' }, { name: 'Orion', faction: 'Progress' },
     { name: 'Eva', faction: 'Progress' }, { name: 'Judge', faction: 'Progress' },
     { name: 'Sebastian', faction: 'Progress' }, { name: 'Isaac', faction: 'Progress' },
     { name: 'Astrid and Lucas', faction: 'Progress' }, { name: 'Arachne', faction: 'Progress' },
-    // Mystery
     { name: 'Folio', faction: 'Mystery' }, { name: 'Miu', faction: 'Mystery' },
     { name: 'Satori', faction: 'Mystery' }, { name: 'Somna', faction: 'Mystery' },
     { name: 'Cascade', faction: 'Mystery' }, { name: 'Amira', faction: 'Mystery' },
@@ -191,6 +209,7 @@
       id: 'h_' + (idx + 1),
       name: h.name,
       faction: h.faction,
+      fav: false,
       synergy: '',
       strong: '',
       counter: '',
@@ -199,13 +218,21 @@
     localStorage.setItem(CODEX_KEY, JSON.stringify(heroes));
   }
 
-  let viewMode = 'home'; // 'home' | 'faction' | 'detail'
+  let viewMode = 'home'; // 'home' | 'faction' | 'detail' | 'teamcheck'
   let activeFaction = 'All';
   let activeHeroId = null;
+  let tcEnemies = ['', '', '', '', ''];
 
   function saveCodex() {
     localStorage.setItem(CODEX_KEY, JSON.stringify(heroes));
+    updateHeroDatalist();
     render();
+  }
+  function updateHeroDatalist() {
+    const dl = document.getElementById('allHeroesDatalist');
+    if (!dl) return;
+    dl.innerHTML = [...heroes].sort((a, b) => a.name.localeCompare(b.name))
+      .map(h => `<option value="${escapeHtml(h.name)}">`).join('');
   }
   function getFactionColor(fName) {
     const f = FACTIONS.find(x => x.id === fName);
@@ -213,6 +240,11 @@
   }
   function escapeHtml(s) {
     return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function textMentionsHero(text, heroName) {
+    if (!text || !heroName) return false;
+    const esc = heroName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return new RegExp(`\\b${esc}\\b`, 'i').test(text);
   }
   function linkifyHeroes(text, currentHeroId) {
     if (!text || !text.trim()) return `<span class="info-empty">No notes added yet. Tap Edit to add.</span>`;
@@ -225,6 +257,28 @@
     });
     return safe;
   }
+  function getLinkedMentions(targetHero) {
+    const links = [];
+    heroes.forEach(other => {
+      if (other.id === targetHero.id) return;
+      if (textMentionsHero(other.counter, targetHero.name)) {
+        links.push({ hero: other, label: 'Strong against (from their Weaknesses)' });
+      }
+      if (textMentionsHero(other.strong, targetHero.name)) {
+        links.push({ hero: other, label: 'Weak against (counters you)' });
+      }
+      if (textMentionsHero(other.synergy, targetHero.name)) {
+        links.push({ hero: other, label: 'Synergy partner' });
+      }
+    });
+    return links;
+  }
+  function toggleFav(id) {
+    const h = heroes.find(x => x.id === id);
+    if (!h) return;
+    h.fav = !h.fav;
+    saveCodex();
+  }
   function goHome() {
     viewMode = 'home';
     activeHeroId = null;
@@ -236,6 +290,13 @@
     viewMode = 'faction';
     activeFaction = fName;
     activeHeroId = null;
+    render();
+  }
+  function openTeamCheck() {
+    viewMode = 'teamcheck';
+    activeHeroId = null;
+    document.getElementById('searchInput').value = '';
+    document.getElementById('clearSearchBtn').style.display = 'none';
     render();
   }
   function openHeroDetail(id) {
@@ -259,6 +320,70 @@
   function hasNotes(h) {
     return Boolean((h.synergy && h.synergy.trim()) || (h.strong && h.strong.trim()) || (h.counter && h.counter.trim()) || (h.notes && h.notes.trim()));
   }
+  function updateTcEnemy(idx, val) {
+    tcEnemies[idx] = val;
+    renderTeamCheckResults();
+  }
+  function clearTeamCheck() {
+    tcEnemies = ['', '', '', '', ''];
+    render();
+  }
+  function renderTeamCheckResults() {
+    const resEl = document.getElementById('tcResults');
+    if (!resEl) return;
+    const selectedEnemies = tcEnemies
+      .map(name => heroes.find(h => h.name.toLowerCase() === name.trim().toLowerCase()))
+      .filter(Boolean);
+
+    if (selectedEnemies.length === 0) {
+      resEl.innerHTML = `<div style="text-align:center; color:var(--muted); font-size:0.88rem; padding:16px;">Select up to 5 enemy heroes above to see counters & warnings from your Codex.</div>`;
+      return;
+    }
+
+    const goodMap = new Map();
+    const badMap = new Map();
+
+    selectedEnemies.forEach(enemy => {
+      heroes.forEach(cand => {
+        if (cand.id === enemy.id) return;
+        // Good if candidate is Strong Against enemy OR enemy lists candidate as Counter/Weakness
+        if (textMentionsHero(cand.strong, enemy.name) || textMentionsHero(enemy.counter, cand.name)) {
+          if (!goodMap.has(cand.id)) goodMap.set(cand.id, { hero: cand, reasons: [] });
+          goodMap.get(cand.id).reasons.push(`vs ${enemy.name}`);
+        }
+        // Bad if candidate is Weak Against enemy OR enemy lists candidate in Strong Against
+        if (textMentionsHero(cand.counter, enemy.name) || textMentionsHero(enemy.strong, cand.name)) {
+          if (!badMap.has(cand.id)) badMap.set(cand.id, { hero: cand, reasons: [] });
+          badMap.get(cand.id).reasons.push(`by ${enemy.name}`);
+        }
+      });
+    });
+
+    const goodList = Array.from(goodMap.values()).sort((a, b) => (b.hero.fav ? 1 : 0) - (a.hero.fav ? 1 : 0) || b.reasons.length - a.reasons.length);
+    const badList = Array.from(badMap.values()).sort((a, b) => (b.hero.fav ? 1 : 0) - (a.hero.fav ? 1 : 0));
+
+    resEl.innerHTML = `
+      <div class="tc-result-card good">
+        <div class="tc-title good">✅ Recommended Counters (${goodList.length})</div>
+        ${goodList.length ? goodList.map(item => `
+          <div class="tc-chip ${item.hero.fav ? 'fav' : ''}" onclick="openHeroDetail('${item.hero.id}')">
+            ${item.hero.fav ? '<span>⭐</span>' : ''}
+            <span style="color:${getFactionColor(item.hero.faction)}">${escapeHtml(item.hero.name)}</span>
+            <span class="tc-reason">(${escapeHtml(item.reasons.join(', '))})</span>
+          </div>
+        `).join('') : '<div style="color:var(--muted); font-size:0.84rem;">No counters logged yet for these enemies.</div>'}
+      </div>
+      <div class="tc-result-card bad">
+        <div class="tc-title bad">⚠️ Avoid / Weak Against (${badList.length})</div>
+        ${badList.length ? badList.map(item => `
+          <div class="tc-chip ${item.hero.fav ? 'fav' : ''}" onclick="openHeroDetail('${item.hero.id}')">
+            ${item.hero.fav ? '<span>⭐</span>' : ''}
+            <span style="color:${getFactionColor(item.hero.faction)}">${escapeHtml(item.hero.name)}</span>
+            <span class="tc-reason">(${escapeHtml(item.reasons.join(', '))})</span>
+          </div>
+        `).join('') : '<div style="color:var(--muted); font-size:0.84rem;">No specific weaknesses logged against this lineup.</div>'}
+      </div>`;
+  }
   function render() {
     const container = document.getElementById('mainView');
     const q = document.getElementById('searchInput').value.trim().toLowerCase();
@@ -266,7 +391,7 @@
     if (q) {
       const matches = heroes.filter(h =>
         [h.name, h.faction, h.synergy, h.strong, h.counter, h.notes].join(' ').toLowerCase().includes(q)
-      ).sort((a, b) => a.name.localeCompare(b.name));
+      ).sort((a, b) => (b.fav ? 1 : 0) - (a.fav ? 1 : 0) || a.name.localeCompare(b.name));
 
       container.innerHTML = `
         <div class="section-header"><h2>Search Results (${matches.length})</h2></div>
@@ -274,7 +399,10 @@
           ${matches.map(h => `
             <div class="hero-item" onclick="openHeroDetail('${h.id}')">
               <span class="hero-item-name" style="color:${getFactionColor(h.faction)}">${escapeHtml(h.name)}</span>
-              ${hasNotes(h) ? '<span class="note-dot"></span>' : ''}
+              <div class="hero-badges">
+                ${h.fav ? '<span class="star-mini">⭐</span>' : ''}
+                ${hasNotes(h) ? '<span class="note-dot"></span>' : ''}
+              </div>
             </div>
           `).join('')}
         </div>`;
@@ -282,7 +410,18 @@
     }
 
     if (viewMode === 'home') {
+      const favCount = heroes.filter(h => h.fav).length;
       container.innerHTML = `
+        <div class="quick-actions">
+          <button class="quick-btn team-check" onclick="openTeamCheck()">
+            <span>⚔️ Team Check</span>
+            <span style="color:var(--muted);">›</span>
+          </button>
+          <button class="quick-btn fav-btn" onclick="openFaction('Favorites')">
+            <span>⭐ Core Heroes</span>
+            <span style="color:var(--gold);">${favCount} ›</span>
+          </button>
+        </div>
         <button class="all-factions-btn" onclick="openFaction('All')">
           <span>▦ All Factions</span>
           <span style="color:var(--muted); font-size:0.85rem;">${heroes.length} heroes ›</span>
@@ -300,24 +439,54 @@
       return;
     }
 
+    if (viewMode === 'teamcheck') {
+      container.innerHTML = `
+        <div class="nav-bar">
+          <button class="back-btn" onclick="goHome()">← Back</button>
+          <button class="btn-small" onclick="clearTeamCheck()">Clear</button>
+        </div>
+        <div class="tc-box">
+          <h2 style="font-size:1.1rem; margin-bottom:4px;">⚔️ Enemy Team Check</h2>
+          <p style="font-size:0.78rem; color:var(--muted);">Enter up to 5 enemy heroes to find counters & warnings:</p>
+          <div class="tc-inputs">
+            ${[0,1,2,3,4].map(i => `
+              <input type="text" list="allHeroesDatalist" placeholder="Enemy Hero ${i + 1}" value="${escapeHtml(tcEnemies[i])}" oninput="updateTcEnemy(${i}, this.value)" />
+            `).join('')}
+          </div>
+        </div>
+        <div id="tcResults"></div>`;
+      renderTeamCheckResults();
+      return;
+    }
+
     if (viewMode === 'faction') {
-      const list = (activeFaction === 'All' ? heroes : heroes.filter(h => h.faction === activeFaction))
-        .slice().sort((a, b) => a.name.localeCompare(b.name));
-      const fColor = activeFaction === 'All' ? '#f8fafc' : getFactionColor(activeFaction);
+      let list;
+      if (activeFaction === 'All') list = [...heroes];
+      else if (activeFaction === 'Favorites') list = heroes.filter(h => h.fav);
+      else list = heroes.filter(h => h.faction === activeFaction);
+
+      list.sort((a, b) => (b.fav ? 1 : 0) - (a.fav ? 1 : 0) || a.name.localeCompare(b.name));
+      const fColor = activeFaction === 'Favorites' ? '#f59e0b' : (activeFaction === 'All' ? '#f8fafc' : getFactionColor(activeFaction));
+      const titleText = activeFaction === 'Favorites' ? '⭐ My Core Heroes' : activeFaction;
+
       container.innerHTML = `
         <div class="nav-bar">
           <button class="back-btn" onclick="goHome()">← Factions</button>
           <span style="font-size:0.8rem; color:var(--muted);">${list.length} heroes</span>
         </div>
-        <div class="section-header"><h2 style="color:${fColor}">${escapeHtml(activeFaction)}</h2></div>
-        <div class="hero-grid">
-          ${list.map(h => `
-            <div class="hero-item" onclick="openHeroDetail('${h.id}')">
-              <span class="hero-item-name" style="color:${getFactionColor(h.faction)}">${escapeHtml(h.name)}</span>
-              ${hasNotes(h) ? '<span class="note-dot" title="Has notes"></span>' : ''}
-            </div>
-          `).join('')}
-        </div>`;
+        <div class="section-header"><h2 style="color:${fColor}">${escapeHtml(titleText)}</h2></div>
+        ${list.length === 0 ? '<div style="text-align:center; color:var(--muted); padding:30px;">No heroes here yet. Open any hero and tap ☆ to star your favorites!</div>' : `
+          <div class="hero-grid">
+            ${list.map(h => `
+              <div class="hero-item" onclick="openHeroDetail('${h.id}')">
+                <span class="hero-item-name" style="color:${getFactionColor(h.faction)}">${escapeHtml(h.name)}</span>
+                <div class="hero-badges">
+                  ${h.fav ? '<span class="star-mini">⭐</span>' : ''}
+                  ${hasNotes(h) ? '<span class="note-dot"></span>' : ''}
+                </div>
+              </div>
+            `).join('')}
+          </div>`}`;
       return;
     }
 
@@ -325,6 +494,8 @@
       const h = heroes.find(x => x.id === activeHeroId);
       if (!h) { goHome(); return; }
       const fColor = getFactionColor(h.faction);
+      const backLinks = getLinkedMentions(h);
+
       container.innerHTML = `
         <div class="nav-bar">
           <button class="back-btn" onclick="openFaction('${h.faction}')">← ${escapeHtml(h.faction)}</button>
@@ -339,6 +510,7 @@
               <div class="detail-hero-name" style="color:${fColor}">${escapeHtml(h.name)}</div>
               <div class="detail-faction-label">${escapeHtml(h.faction)} Faction</div>
             </div>
+            <button class="star-toggle" onclick="toggleFav('${h.id}')" title="Favorite / Core Hero">${h.fav ? '⭐' : '☆'}</button>
           </div>
           <div class="info-block">
             <div class="info-label">🤝 Synergies</div>
@@ -356,6 +528,16 @@
             <div class="info-label">📝 Notes</div>
             <div class="info-content">${linkifyHeroes(h.notes, h.id)}</div>
           </div>
+          ${backLinks.length > 0 ? `
+            <div class="info-block">
+              <div class="info-label">🔗 Linked From Other Heroes</div>
+              <div class="info-content">${backLinks.map(l => `
+                <div class="backlink-row">
+                  <span class="hero-link" style="color:${getFactionColor(l.hero.faction)}" onclick="openHeroDetail('${l.hero.id}')">${escapeHtml(l.hero.name)}</span>
+                  <span class="backlink-tag"> — ${escapeHtml(l.label)}</span>
+                </div>`).join('')}
+              </div>
+            </div>` : ''}
         </div>`;
     }
   }
@@ -376,7 +558,7 @@
     } else {
       document.getElementById('modalTitle').textContent = 'Add New Hero';
       document.getElementById('editHeroId').value = '';
-      if (viewMode === 'faction' && activeFaction !== 'All') {
+      if (viewMode === 'faction' && activeFaction !== 'All' && activeFaction !== 'Favorites') {
         document.getElementById('heroFactionInput').value = activeFaction;
       }
     }
@@ -386,10 +568,12 @@
   function saveHero(e) {
     e.preventDefault();
     const id = document.getElementById('editHeroId').value;
+    const existing = id ? heroes.find(x => x.id === id) : null;
     const obj = {
       id: id || 'h_' + Date.now(),
       name: document.getElementById('heroNameInput').value.trim(),
       faction: document.getElementById('heroFactionInput').value,
+      fav: existing ? Boolean(existing.fav) : false,
       synergy: document.getElementById('heroSynergyInput').value.trim(),
       strong: document.getElementById('heroStrongInput').value.trim(),
       counter: document.getElementById('heroCounterInput').value.trim(),
@@ -421,7 +605,7 @@
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'gaben-codex-backup.json'; a.click();
   }
   function importJSON(e) {
-    const f = e.target.files[0]; if (!f) return;
+    const f = e.target.files; if (!f) return;
     const r = new FileReader();
     r.onload = ev => {
       try {
@@ -434,7 +618,7 @@
     };
     r.readAsText(f);
   }
-  render();
+  updateHeroDatalist(); render();
 </script>
 </body>
 </html>
