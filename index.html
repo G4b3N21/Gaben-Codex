@@ -16,17 +16,22 @@
       --win: #10b981; --loss: #ef4444;
       --eternity: #c4b5fd; --nature: #4ade80; --honor: #bae6fd;
       --chaos: #fb7185; --progress: #38bdf8; --mystery: #e879f9;
+      --water: #38bdf8; --fire: #fb7185; --earth: #4ade80;
+      --light: #fde047; --darkness: #a855f7; --elarite: #2dd4bf;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background: var(--bg); color: var(--text); padding-bottom: 85px; }
     .container { max-width: 600px; margin: 0 auto; padding: 14px; }
-    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
     .app-title { display: flex; align-items: center; gap: 10px; cursor: pointer; }
     .app-title img { width: 38px; height: 38px; border-radius: 10px; object-fit: cover; border: 1px solid var(--border); }
     .title-text h1 { font-size: 1.15rem; font-weight: 800; line-height: 1.1; }
     .guild-subtitle { font-size: 0.75rem; color: var(--gold); font-weight: 700; margin-top: 2px; }
     .backup-btns { display: flex; gap: 5px; }
     .btn-small { background: var(--card); color: var(--muted); border: 1px solid var(--border); padding: 6px 9px; border-radius: 8px; font-size: 0.72rem; font-weight: 600; cursor: pointer; }
+    .mode-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; background: var(--card); padding: 4px; border-radius: 12px; border: 1px solid var(--border); }
+    .mode-tab { background: none; border: none; color: var(--muted); padding: 9px; border-radius: 9px; font-size: 0.9rem; font-weight: 800; cursor: pointer; }
+    .mode-tab.active { background: var(--primary); color: #fff; }
     .search-box { position: relative; margin-bottom: 12px; }
     .search-box input { width: 100%; background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 11px 36px 11px 14px; border-radius: 10px; font-size: 0.95rem; outline: none; }
     .clear-search { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--muted); font-size: 1.1rem; cursor: pointer; display: none; }
@@ -61,20 +66,25 @@
     .info-empty { color: #64748b; font-style: italic; }
     .hero-link { font-weight: 700; text-decoration: underline; cursor: pointer; }
     .backlink-row { margin-bottom: 5px; font-size: 0.86rem; }
-    .backlink-row:last-child { margin-bottom: 0; }
     .backlink-tag { color: var(--muted); font-size: 0.75rem; font-weight: 700; }
-    /* Team Check Styles */
     .tc-box { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; margin-bottom: 12px; }
-    .tc-inputs { display: grid; grid-template-columns: 1fr; gap: 7px; margin: 10px 0; }
+    .tc-subtabs { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 12px; background: var(--input); padding: 4px; border-radius: 10px; border: 1px solid var(--border); }
+    .tc-subtab { background: none; border: none; color: var(--muted); padding: 8px 6px; border-radius: 7px; font-size: 0.82rem; font-weight: 700; cursor: pointer; }
+    .tc-subtab.active { background: var(--card); color: var(--text); border: 1px solid var(--border); }
+    .tc-inputs { display: grid; grid-template-columns: 1fr; gap: 7px; margin: 10px 0 4px; }
     .tc-result-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; margin-bottom: 10px; }
     .tc-result-card.good { border-color: rgba(16,185,129,0.45); }
     .tc-result-card.bad { border-color: rgba(239,68,68,0.45); }
+    .tc-result-card.syn { border-color: rgba(59,130,246,0.45); }
     .tc-title { font-size: 0.88rem; font-weight: 800; margin-bottom: 8px; }
     .tc-title.good { color: var(--win); }
     .tc-title.bad { color: var(--loss); }
+    .tc-title.syn { color: #60a5fa; }
     .tc-chip { display: inline-flex; align-items: center; gap: 5px; background: rgba(15,23,42,0.7); border: 1px solid var(--border); padding: 6px 10px; border-radius: 8px; margin: 0 6px 6px 0; font-size: 0.84rem; font-weight: 700; cursor: pointer; }
     .tc-chip.fav { border-color: var(--gold); background: rgba(245,158,11,0.12); }
+    .tc-count-badge { background: rgba(239,68,68,0.25); color: #fca5a5; padding: 1px 5px; border-radius: 5px; font-size: 0.72rem; font-weight: 800; }
     .tc-reason { font-size: 0.72rem; color: var(--muted); font-weight: 500; }
+    .syn-pair { background: rgba(15,23,42,0.65); border: 1px solid var(--border); padding: 8px 10px; border-radius: 8px; margin-bottom: 6px; font-size: 0.85rem; }
     .fab { position: fixed; bottom: 20px; right: 20px; left: 20px; max-width: 560px; margin: 0 auto; background: var(--primary); color: #fff; border: none; padding: 14px; border-radius: 14px; font-size: 1rem; font-weight: 700; box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.4); cursor: pointer; z-index: 10; }
     .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.82); display: none; justify-content: center; align-items: flex-start; overflow-y: auto; padding: 12px; z-index: 50; }
     .modal-overlay.open { display: flex; }
@@ -84,7 +94,7 @@
     .form-group { margin-bottom: 12px; }
     label { display: block; font-size: 0.78rem; color: var(--muted); margin-bottom: 4px; font-weight: 600; }
     input[type="text"], select, textarea { width: 100%; background: var(--input); border: 1px solid var(--border); color: var(--text); padding: 10px; border-radius: 8px; font-size: 0.92rem; outline: none; font-family: inherit; }
-    textarea { min-height: 68px; resize: vertical; }
+    textarea { min-height: 66px; resize: vertical; }
     .save-btn { width: 100%; background: var(--win); color: #052e16; border: none; padding: 13px; border-radius: 10px; font-size: 1rem; font-weight: 800; cursor: pointer; margin-top: 6px; }
   </style>
 </head>
@@ -105,69 +115,78 @@
     </div>
   </header>
 
+  <div class="mode-tabs">
+    <button class="mode-tab active" id="tabHeroes" onclick="switchEntityMode('heroes')">🦸 Heroes</button>
+    <button class="mode-tab" id="tabTitans" onclick="switchEntityMode('titans')">🗿 Titans</button>
+  </div>
+
   <div class="search-box">
-    <input type="text" id="searchInput" placeholder="Search hero, synergy or counter..." oninput="handleSearch()" />
+    <input type="text" id="searchInput" placeholder="Search name, synergy or counter..." oninput="handleSearch()" />
     <button class="clear-search" id="clearSearchBtn" onclick="clearSearch()">✕</button>
   </div>
 
   <div id="mainView"></div>
 </div>
 
-<button class="fab" onclick="openHeroModal()">+ Add Hero</button>
+<button class="fab" id="fabBtn" onclick="openEntryModal()">+ Add Hero</button>
 
-<div class="modal-overlay" id="heroModal">
+<div class="modal-overlay" id="entryModal">
   <div class="modal">
     <div class="modal-header">
-      <h2 id="modalTitle">Edit Hero</h2>
+      <h2 id="modalTitle">Edit</h2>
       <button class="close-modal" onclick="closeModal()">✕</button>
     </div>
-    <form id="heroForm" onsubmit="saveHero(event)">
-      <input type="hidden" id="editHeroId" />
+    <form id="entryForm" onsubmit="saveEntry(event)">
+      <input type="hidden" id="editId" />
       <div class="form-group">
-        <label>Hero Name</label>
-        <input type="text" id="heroNameInput" placeholder="e.g. Guus" required />
+        <label id="nameLabel">Hero Name</label>
+        <input type="text" id="nameInput" required />
       </div>
       <div class="form-group">
-        <label>Faction</label>
-        <select id="heroFactionInput" required>
-          <option value="Eternity">Eternity</option>
-          <option value="Nature">Nature</option>
-          <option value="Honor">Honor</option>
-          <option value="Chaos">Chaos</option>
-          <option value="Progress">Progress</option>
-          <option value="Mystery">Mystery</option>
-        </select>
+        <label id="groupLabel">Faction</label>
+        <select id="groupInput" required></select>
       </div>
       <div class="form-group">
         <label>🤝 Synergies (Works well with)</label>
-        <textarea id="heroSynergyInput" placeholder="e.g. Soleil, Fafnir, Tristan..."></textarea>
+        <textarea id="synergyInput" placeholder="Who works well in the same team?"></textarea>
       </div>
       <div class="form-group">
         <label>⚔️ Strong Against (Counters)</label>
-        <textarea id="heroStrongInput" placeholder="Who does this hero beat?"></textarea>
+        <textarea id="strongInput" placeholder="Who does this unit beat?"></textarea>
       </div>
       <div class="form-group">
         <label>🛡️ Counters / Weak Against</label>
-        <textarea id="heroCounterInput" placeholder="Who beats this hero?"></textarea>
+        <textarea id="counterInput" placeholder="Who beats this unit?"></textarea>
       </div>
       <div class="form-group">
         <label>📝 Notes (Skins, Artifacts, Tips)</label>
-        <textarea id="heroNotesInput" placeholder="Optional build notes..."></textarea>
+        <textarea id="notesInput" placeholder="Optional build notes..."></textarea>
       </div>
-      <button type="submit" class="save-btn">Save Hero</button>
+      <button type="submit" class="save-btn">Save</button>
     </form>
   </div>
 </div>
-<datalist id="allHeroesDatalist"></datalist>
+<datalist id="activeDatalist"></datalist>
 <script>
-  const CODEX_KEY = 'gaben_codex_v1';
-  const FACTIONS = [
+  const HEROES_KEY = 'gaben_codex_v1';
+  const TITANS_KEY = 'gaben_codex_titans_v1';
+
+  const HERO_GROUPS = [
     { id: 'Eternity', icon: '☥', color: '#c4b5fd' },
     { id: 'Nature',   icon: '🍃', color: '#4ade80' },
     { id: 'Honor',    icon: '🪽', color: '#bae6fd' },
     { id: 'Chaos',    icon: '👹', color: '#fb7185' },
     { id: 'Progress', icon: '⚙️', color: '#38bdf8' },
     { id: 'Mystery',  icon: '🔥', color: '#e879f9' }
+  ];
+
+  const TITAN_GROUPS = [
+    { id: 'Water',    icon: '💧', color: '#38bdf8' },
+    { id: 'Fire',     icon: '🔥', color: '#fb7185' },
+    { id: 'Earth',    icon: '🌿', color: '#4ade80' },
+    { id: 'Light',    icon: '☀️', color: '#fde047' },
+    { id: 'Darkness', icon: '🌑', color: '#a855f7' },
+    { id: 'Elarite',  icon: '✨', color: '#2dd4bf' }
   ];
 
   const DEFAULT_HEROES = [
@@ -203,105 +222,135 @@
     { name: 'Martha', faction: 'Mystery' }, { name: 'Rufus', faction: 'Mystery' }
   ];
 
-  let heroes = JSON.parse(localStorage.getItem(CODEX_KEY) || 'null');
+  const DEFAULT_TITANS = [
+    { name: 'Sigurd', faction: 'Water' }, { name: 'Nova', faction: 'Water' },
+    { name: 'Mairi', faction: 'Water' }, { name: 'Hyperion', faction: 'Water' },
+    { name: 'Tydus', faction: 'Water' },
+    { name: 'Moloch', faction: 'Fire' }, { name: 'Vulcan', faction: 'Fire' },
+    { name: 'Ignis', faction: 'Fire' }, { name: 'Araji', faction: 'Fire' },
+    { name: 'Asherona', faction: 'Fire' },
+    { name: 'Angus', faction: 'Earth' }, { name: 'Sylva', faction: 'Earth' },
+    { name: 'Avalon', faction: 'Earth' }, { name: 'Eden', faction: 'Earth' },
+    { name: 'Verdoc', faction: 'Earth' },
+    { name: 'Rigel', faction: 'Light' }, { name: 'Amon', faction: 'Light' },
+    { name: 'Iyari', faction: 'Light' }, { name: 'Solaris', faction: 'Light' },
+    { name: 'Lumira', faction: 'Light' },
+    { name: 'Brustar', faction: 'Darkness' }, { name: 'Keros', faction: 'Darkness' },
+    { name: 'Mort', faction: 'Darkness' }, { name: 'Tenebris', faction: 'Darkness' },
+    { name: 'Umbra', faction: 'Darkness' },
+    { name: 'Metida', faction: 'Elarite' }, { name: 'Orm', faction: 'Elarite' },
+    { name: 'Alecto', faction: 'Elarite' }, { name: 'Pallant', faction: 'Elarite' }
+  ];
+
+  let heroes = JSON.parse(localStorage.getItem(HEROES_KEY) || 'null');
   if (!heroes) {
-    heroes = DEFAULT_HEROES.map((h, idx) => ({
-      id: 'h_' + (idx + 1),
-      name: h.name,
-      faction: h.faction,
-      fav: false,
-      synergy: '',
-      strong: '',
-      counter: '',
-      notes: ''
-    }));
-    localStorage.setItem(CODEX_KEY, JSON.stringify(heroes));
+    heroes = DEFAULT_HEROES.map((h, i) => ({ id: 'h_' + (i + 1), name: h.name, faction: h.faction, fav: false, synergy: '', strong: '', counter: '', notes: '' }));
+    localStorage.setItem(HEROES_KEY, JSON.stringify(heroes));
   }
 
-  let viewMode = 'home'; // 'home' | 'faction' | 'detail' | 'teamcheck'
-  let activeFaction = 'All';
-  let activeHeroId = null;
-  let tcEnemies = ['', '', '', '', ''];
+  let titans = JSON.parse(localStorage.getItem(TITANS_KEY) || 'null');
+  if (!titans) {
+    titans = DEFAULT_TITANS.map((t, i) => ({ id: 't_' + (i + 1), name: t.name, faction: t.faction, fav: false, synergy: '', strong: '', counter: '', notes: '' }));
+    localStorage.setItem(TITANS_KEY, JSON.stringify(titans));
+  }
 
-  function saveCodex() {
-    localStorage.setItem(CODEX_KEY, JSON.stringify(heroes));
-    updateHeroDatalist();
+  let entityMode = 'heroes'; // 'heroes' | 'titans'
+  let viewMode = 'home';     // 'home' | 'group' | 'detail' | 'teamcheck'
+  let tcSubMode = 'enemy';   // 'enemy' | 'builder'
+  let activeGroup = 'All';
+  let activeEntryId = null;
+  let tcSlots = ['', '', '', '', ''];
+
+  function getActiveList() { return entityMode === 'heroes' ? heroes : titans; }
+  function getActiveGroups() { return entityMode === 'heroes' ? HERO_GROUPS : TITAN_GROUPS; }
+  function saveCurrent() {
+    if (entityMode === 'heroes') localStorage.setItem(HEROES_KEY, JSON.stringify(heroes));
+    else localStorage.setItem(TITANS_KEY, JSON.stringify(titans));
+    updateDatalist();
     render();
   }
-  function updateHeroDatalist() {
-    const dl = document.getElementById('allHeroesDatalist');
+  function updateDatalist() {
+    const dl = document.getElementById('activeDatalist');
     if (!dl) return;
-    dl.innerHTML = [...heroes].sort((a, b) => a.name.localeCompare(b.name))
-      .map(h => `<option value="${escapeHtml(h.name)}">`).join('');
+    dl.innerHTML = [...getActiveList()].sort((a, b) => a.name.localeCompare(b.name))
+      .map(x => `<option value="${escapeHtml(x.name)}">`).join('');
   }
-  function getFactionColor(fName) {
-    const f = FACTIONS.find(x => x.id === fName);
-    return f ? f.color : '#f8fafc';
+  function getGroupColor(gName) {
+    const g = getActiveGroups().find(x => x.id === gName);
+    return g ? g.color : '#f8fafc';
   }
   function escapeHtml(s) {
     return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
-  function textMentionsHero(text, heroName) {
-    if (!text || !heroName) return false;
-    const esc = heroName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  function textMentions(text, name) {
+    if (!text || !name) return false;
+    const esc = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     return new RegExp(`\\b${esc}\\b`, 'i').test(text);
   }
-  function linkifyHeroes(text, currentHeroId) {
+  function linkify(text, currentId) {
     if (!text || !text.trim()) return `<span class="info-empty">No notes added yet. Tap Edit to add.</span>`;
     let safe = escapeHtml(text);
-    const sorted = [...heroes].filter(h => h.id !== currentHeroId).sort((a, b) => b.name.length - a.name.length);
-    sorted.forEach(h => {
-      const escName = escapeHtml(h.name).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const sorted = [...getActiveList()].filter(x => x.id !== currentId).sort((a, b) => b.name.length - a.name.length);
+    sorted.forEach(x => {
+      const escName = escapeHtml(x.name).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       const regex = new RegExp(`\\b(${escName})\\b`, 'gi');
-      safe = safe.replace(regex, `<span class="hero-link" style="color:${getFactionColor(h.faction)}" onclick="openHeroDetail('${h.id}')">$1</span>`);
+      safe = safe.replace(regex, `<span class="hero-link" style="color:${getGroupColor(x.faction)}" onclick="openDetail('${x.id}')">$1</span>`);
     });
     return safe;
   }
-  function getLinkedMentions(targetHero) {
+  function getLinkedMentions(target) {
     const links = [];
-    heroes.forEach(other => {
-      if (other.id === targetHero.id) return;
-      if (textMentionsHero(other.counter, targetHero.name)) {
-        links.push({ hero: other, label: 'Strong against (from their Weaknesses)' });
-      }
-      if (textMentionsHero(other.strong, targetHero.name)) {
-        links.push({ hero: other, label: 'Weak against (counters you)' });
-      }
-      if (textMentionsHero(other.synergy, targetHero.name)) {
-        links.push({ hero: other, label: 'Synergy partner' });
-      }
+    getActiveList().forEach(other => {
+      if (other.id === target.id) return;
+      if (textMentions(other.counter, target.name)) links.push({ item: other, label: 'Strong against (from their Weaknesses)' });
+      if (textMentions(other.strong, target.name)) links.push({ item: other, label: 'Weak against (counters you)' });
+      if (textMentions(other.synergy, target.name)) links.push({ item: other, label: 'Synergy partner' });
     });
     return links;
   }
+  function switchEntityMode(m) {
+    entityMode = m;
+    document.getElementById('tabHeroes').classList.toggle('active', m === 'heroes');
+    document.getElementById('tabTitans').classList.toggle('active', m === 'titans');
+    document.getElementById('fabBtn').textContent = m === 'heroes' ? '+ Add Hero' : '+ Add Titan';
+    tcSlots = ['', '', '', '', ''];
+    updateDatalist();
+    goHome();
+  }
   function toggleFav(id) {
-    const h = heroes.find(x => x.id === id);
-    if (!h) return;
-    h.fav = !h.fav;
-    saveCodex();
+    const item = getActiveList().find(x => x.id === id);
+    if (!item) return;
+    item.fav = !item.fav;
+    saveCurrent();
   }
   function goHome() {
     viewMode = 'home';
-    activeHeroId = null;
+    activeEntryId = null;
     document.getElementById('searchInput').value = '';
     document.getElementById('clearSearchBtn').style.display = 'none';
     render();
   }
-  function openFaction(fName) {
-    viewMode = 'faction';
-    activeFaction = fName;
-    activeHeroId = null;
+  function openGroup(gName) {
+    viewMode = 'group';
+    activeGroup = gName;
+    activeEntryId = null;
     render();
   }
-  function openTeamCheck() {
+  function openTeamCheck(sub = 'enemy') {
     viewMode = 'teamcheck';
-    activeHeroId = null;
+    tcSubMode = sub;
+    activeEntryId = null;
     document.getElementById('searchInput').value = '';
     document.getElementById('clearSearchBtn').style.display = 'none';
     render();
   }
-  function openHeroDetail(id) {
+  function switchTcSubMode(sub) {
+    tcSubMode = sub;
+    render();
+  }
+  function openDetail(id) {
     viewMode = 'detail';
-    activeHeroId = id;
+    activeEntryId = id;
     document.getElementById('searchInput').value = '';
     document.getElementById('clearSearchBtn').style.display = 'none';
     render();
@@ -317,122 +366,161 @@
     document.getElementById('clearSearchBtn').style.display = 'none';
     render();
   }
-  function hasNotes(h) {
-    return Boolean((h.synergy && h.synergy.trim()) || (h.strong && h.strong.trim()) || (h.counter && h.counter.trim()) || (h.notes && h.notes.trim()));
+  function hasNotes(x) {
+    return Boolean((x.synergy && x.synergy.trim()) || (x.strong && x.strong.trim()) || (x.counter && x.counter.trim()) || (x.notes && x.notes.trim()));
   }
-  function updateTcEnemy(idx, val) {
-    tcEnemies[idx] = val;
+  function updateTcSlot(idx, val) {
+    tcSlots[idx] = val;
     renderTeamCheckResults();
   }
-  function clearTeamCheck() {
-    tcEnemies = ['', '', '', '', ''];
+  function clearTcSlots() {
+    tcSlots = ['', '', '', '', ''];
     render();
   }
   function renderTeamCheckResults() {
     const resEl = document.getElementById('tcResults');
     if (!resEl) return;
-    const selectedEnemies = tcEnemies
-      .map(name => heroes.find(h => h.name.toLowerCase() === name.trim().toLowerCase()))
-      .filter(Boolean);
+    const list = getActiveList();
+    const picked = tcSlots.map(n => list.find(x => x.name.toLowerCase() === n.trim().toLowerCase())).filter(Boolean);
 
-    if (selectedEnemies.length === 0) {
-      resEl.innerHTML = `<div style="text-align:center; color:var(--muted); font-size:0.88rem; padding:16px;">Select up to 5 enemy heroes above to see counters & warnings from your Codex.</div>`;
+    if (picked.length === 0) {
+      resEl.innerHTML = `<div style="text-align:center; color:var(--muted); font-size:0.86rem; padding:16px;">Select up to 5 ${entityMode} above to analyze!</div>`;
       return;
     }
 
-    const goodMap = new Map();
-    const badMap = new Map();
-
-    selectedEnemies.forEach(enemy => {
-      heroes.forEach(cand => {
-        if (cand.id === enemy.id) return;
-        // Good if candidate is Strong Against enemy OR enemy lists candidate as Counter/Weakness
-        if (textMentionsHero(cand.strong, enemy.name) || textMentionsHero(enemy.counter, cand.name)) {
-          if (!goodMap.has(cand.id)) goodMap.set(cand.id, { hero: cand, reasons: [] });
-          goodMap.get(cand.id).reasons.push(`vs ${enemy.name}`);
-        }
-        // Bad if candidate is Weak Against enemy OR enemy lists candidate in Strong Against
-        if (textMentionsHero(cand.counter, enemy.name) || textMentionsHero(enemy.strong, cand.name)) {
-          if (!badMap.has(cand.id)) badMap.set(cand.id, { hero: cand, reasons: [] });
-          badMap.get(cand.id).reasons.push(`by ${enemy.name}`);
-        }
+    if (tcSubMode === 'enemy') {
+      const goodMap = new Map(), badMap = new Map();
+      picked.forEach(enemy => {
+        list.forEach(cand => {
+          if (cand.id === enemy.id) return;
+          if (textMentions(cand.strong, enemy.name) || textMentions(enemy.counter, cand.name)) {
+            if (!goodMap.has(cand.id)) goodMap.set(cand.id, { item: cand, reasons: [] });
+            goodMap.get(cand.id).reasons.push(`vs ${enemy.name}`);
+          }
+          if (textMentions(cand.counter, enemy.name) || textMentions(enemy.strong, cand.name)) {
+            if (!badMap.has(cand.id)) badMap.set(cand.id, { item: cand, reasons: [] });
+            badMap.get(cand.id).reasons.push(`by ${enemy.name}`);
+          }
+        });
       });
-    });
+      const goodList = Array.from(goodMap.values()).sort((a, b) => (b.item.fav ? 1 : 0) - (a.item.fav ? 1 : 0) || b.reasons.length - a.reasons.length);
+      const badList = Array.from(badMap.values()).sort((a, b) => (b.item.fav ? 1 : 0) - (a.item.fav ? 1 : 0));
 
-    const goodList = Array.from(goodMap.values()).sort((a, b) => (b.hero.fav ? 1 : 0) - (a.hero.fav ? 1 : 0) || b.reasons.length - a.reasons.length);
-    const badList = Array.from(badMap.values()).sort((a, b) => (b.hero.fav ? 1 : 0) - (a.hero.fav ? 1 : 0));
+      resEl.innerHTML = `
+        <div class="tc-result-card good">
+          <div class="tc-title good">✅ Recommended Counters (${goodList.length})</div>
+          ${goodList.length ? goodList.map(r => `
+            <div class="tc-chip ${r.item.fav ? 'fav' : ''}" onclick="openDetail('${r.item.id}')">
+              ${r.item.fav ? '<span>⭐</span>' : ''}
+              <span style="color:${getGroupColor(r.item.faction)}">${escapeHtml(r.item.name)}</span>
+              <span class="tc-reason">(${escapeHtml(r.reasons.join(', '))})</span>
+            </div>`).join('') : '<div style="color:var(--muted); font-size:0.84rem;">No counters logged yet for these enemies.</div>'}
+        </div>
+        <div class="tc-result-card bad">
+          <div class="tc-title bad">⚠️ Avoid / Weak Against (${badList.length})</div>
+          ${badList.length ? badList.map(r => `
+            <div class="tc-chip ${r.item.fav ? 'fav' : ''}" onclick="openDetail('${r.item.id}')">
+              ${r.item.fav ? '<span>⭐</span>' : ''}
+              <span style="color:${getGroupColor(r.item.faction)}">${escapeHtml(r.item.name)}</span>
+              <span class="tc-reason">(${escapeHtml(r.reasons.join(', '))})</span>
+            </div>`).join('') : '<div style="color:var(--muted); font-size:0.84rem;">No weaknesses logged against this lineup.</div>'}
+        </div>`;
+    } else {
+      // My Team Builder: Synergies within team + Shared Threats against team
+      const synPairs = [];
+      for (let i = 0; i < picked.length; i++) {
+        for (let j = i + 1; j < picked.length; j++) {
+          const a = picked.at(i), b = picked.at(j);
+          if (textMentions(a.synergy, b.name) || textMentions(b.synergy, a.name)) {
+            synPairs.push({ a, b });
+          }
+        }
+      }
+      const threatMap = new Map();
+      picked.forEach(ally => {
+        list.forEach(threat => {
+          if (picked.some(p => p.id === threat.id)) return;
+          if (textMentions(ally.counter, threat.name) || textMentions(threat.strong, ally.name)) {
+            if (!threatMap.has(threat.id)) threatMap.set(threat.id, { item: threat, hits: [] });
+            threatMap.get(threat.id).hits.push(ally.name);
+          }
+        });
+      });
+      const threats = Array.from(threatMap.values()).sort((a, b) => b.hits.length - a.hits.length);
 
-    resEl.innerHTML = `
-      <div class="tc-result-card good">
-        <div class="tc-title good">✅ Recommended Counters (${goodList.length})</div>
-        ${goodList.length ? goodList.map(item => `
-          <div class="tc-chip ${item.hero.fav ? 'fav' : ''}" onclick="openHeroDetail('${item.hero.id}')">
-            ${item.hero.fav ? '<span>⭐</span>' : ''}
-            <span style="color:${getFactionColor(item.hero.faction)}">${escapeHtml(item.hero.name)}</span>
-            <span class="tc-reason">(${escapeHtml(item.reasons.join(', '))})</span>
-          </div>
-        `).join('') : '<div style="color:var(--muted); font-size:0.84rem;">No counters logged yet for these enemies.</div>'}
-      </div>
-      <div class="tc-result-card bad">
-        <div class="tc-title bad">⚠️ Avoid / Weak Against (${badList.length})</div>
-        ${badList.length ? badList.map(item => `
-          <div class="tc-chip ${item.hero.fav ? 'fav' : ''}" onclick="openHeroDetail('${item.hero.id}')">
-            ${item.hero.fav ? '<span>⭐</span>' : ''}
-            <span style="color:${getFactionColor(item.hero.faction)}">${escapeHtml(item.hero.name)}</span>
-            <span class="tc-reason">(${escapeHtml(item.reasons.join(', '))})</span>
-          </div>
-        `).join('') : '<div style="color:var(--muted); font-size:0.84rem;">No specific weaknesses logged against this lineup.</div>'}
-      </div>`;
+      resEl.innerHTML = `
+        <div class="tc-result-card syn">
+          <div class="tc-title syn">🤝 Active Team Synergies (${synPairs.length})</div>
+          ${synPairs.length ? synPairs.map(p => `
+            <div class="syn-pair">
+              <span class="hero-link" style="color:${getGroupColor(p.a.faction)}" onclick="openDetail('${p.a.id}')">${escapeHtml(p.a.name)}</span>
+              <span style="color:var(--muted);"> + </span>
+              <span class="hero-link" style="color:${getGroupColor(p.b.faction)}" onclick="openDetail('${p.b.id}')">${escapeHtml(p.b.name)}</span>
+            </div>`).join('') : '<div style="color:var(--muted); font-size:0.84rem;">No direct synergies logged between these picks yet.</div>'}
+        </div>
+        <div class="tc-result-card bad">
+          <div class="tc-title bad">⚠️ Shared Threats / Big Enemies (${threats.length})</div>
+          ${threats.length ? threats.map(t => `
+            <div class="tc-chip" onclick="openDetail('${t.item.id}')">
+              ${t.hits.length > 1 ? `<span class="tc-count-badge">${t.hits.length}x</span>` : ''}
+              <span style="color:${getGroupColor(t.item.faction)}">${escapeHtml(t.item.name)}</span>
+              <span class="tc-reason">(counters ${escapeHtml(t.hits.join(', '))})</span>
+            </div>`).join('') : '<div style="color:var(--muted); font-size:0.84rem;">No major threats logged against this team yet.</div>'}
+        </div>`;
+    }
   }
   function render() {
     const container = document.getElementById('mainView');
     const q = document.getElementById('searchInput').value.trim().toLowerCase();
+    const listAll = getActiveList();
+    const groups = getActiveGroups();
+    const unitPlural = entityMode === 'heroes' ? 'heroes' : 'titans';
+    const groupWord = entityMode === 'heroes' ? 'Factions' : 'Elements';
 
     if (q) {
-      const matches = heroes.filter(h =>
-        [h.name, h.faction, h.synergy, h.strong, h.counter, h.notes].join(' ').toLowerCase().includes(q)
+      const matches = listAll.filter(x =>
+        [x.name, x.faction, x.synergy, x.strong, x.counter, x.notes].join(' ').toLowerCase().includes(q)
       ).sort((a, b) => (b.fav ? 1 : 0) - (a.fav ? 1 : 0) || a.name.localeCompare(b.name));
 
       container.innerHTML = `
         <div class="section-header"><h2>Search Results (${matches.length})</h2></div>
         <div class="hero-grid">
-          ${matches.map(h => `
-            <div class="hero-item" onclick="openHeroDetail('${h.id}')">
-              <span class="hero-item-name" style="color:${getFactionColor(h.faction)}">${escapeHtml(h.name)}</span>
+          ${matches.map(x => `
+            <div class="hero-item" onclick="openDetail('${x.id}')">
+              <span class="hero-item-name" style="color:${getGroupColor(x.faction)}">${escapeHtml(x.name)}</span>
               <div class="hero-badges">
-                ${h.fav ? '<span class="star-mini">⭐</span>' : ''}
-                ${hasNotes(h) ? '<span class="note-dot"></span>' : ''}
+                ${x.fav ? '<span class="star-mini">⭐</span>' : ''}
+                ${hasNotes(x) ? '<span class="note-dot"></span>' : ''}
               </div>
-            </div>
-          `).join('')}
+            </div>`).join('')}
         </div>`;
       return;
     }
 
     if (viewMode === 'home') {
-      const favCount = heroes.filter(h => h.fav).length;
+      const favCount = listAll.filter(x => x.fav).length;
       container.innerHTML = `
         <div class="quick-actions">
-          <button class="quick-btn team-check" onclick="openTeamCheck()">
+          <button class="quick-btn team-check" onclick="openTeamCheck('enemy')">
             <span>⚔️ Team Check</span>
             <span style="color:var(--muted);">›</span>
           </button>
-          <button class="quick-btn fav-btn" onclick="openFaction('Favorites')">
-            <span>⭐ Core Heroes</span>
+          <button class="quick-btn fav-btn" onclick="openGroup('Favorites')">
+            <span>⭐ Core ${entityMode === 'heroes' ? 'Heroes' : 'Titans'}</span>
             <span style="color:var(--gold);">${favCount} ›</span>
           </button>
         </div>
-        <button class="all-factions-btn" onclick="openFaction('All')">
-          <span>▦ All Factions</span>
-          <span style="color:var(--muted); font-size:0.85rem;">${heroes.length} heroes ›</span>
+        <button class="all-factions-btn" onclick="openGroup('All')">
+          <span>▦ All ${groupWord}</span>
+          <span style="color:var(--muted); font-size:0.85rem;">${listAll.length} ${unitPlural} ›</span>
         </button>
         <div class="faction-grid">
-          ${FACTIONS.map(f => {
-            const count = heroes.filter(h => h.faction === f.id).length;
+          ${groups.map(g => {
+            const count = listAll.filter(x => x.faction === g.id).length;
             return `
-              <div class="faction-card" style="border-color:${f.color}44" onclick="openFaction('${f.id}')">
-                <div class="faction-name" style="color:${f.color}">${f.icon} ${f.id}</div>
-                <div class="faction-count">${count} heroes</div>
+              <div class="faction-card" style="border-color:${g.color}44" onclick="openGroup('${g.id}')">
+                <div class="faction-name" style="color:${g.color}">${g.icon} ${g.id}</div>
+                <div class="faction-count">${count} ${unitPlural}</div>
               </div>`;
           }).join('')}
         </div>`;
@@ -440,100 +528,94 @@
     }
 
     if (viewMode === 'teamcheck') {
+      const labelSlot = entityMode === 'heroes' ? 'Hero' : 'Titan';
+      const slotsHtml = Array.from({ length: 5 }, (_, i) => `
+        <input type="text" list="activeDatalist" placeholder="${tcSubMode === 'enemy' ? 'Enemy' : 'My'} ${labelSlot} ${i + 1}" value="${escapeHtml(tcSlots.at(i))}" oninput="updateTcSlot(${i}, this.value)" />
+      `).join('');
+
       container.innerHTML = `
         <div class="nav-bar">
           <button class="back-btn" onclick="goHome()">← Back</button>
-          <button class="btn-small" onclick="clearTeamCheck()">Clear</button>
+          <button class="btn-small" onclick="clearTcSlots()">Clear</button>
         </div>
         <div class="tc-box">
-          <h2 style="font-size:1.1rem; margin-bottom:4px;">⚔️ Enemy Team Check</h2>
-          <p style="font-size:0.78rem; color:var(--muted);">Enter up to 5 enemy heroes to find counters & warnings:</p>
-          <div class="tc-inputs">
-            ${[0,1,2,3,4].map(i => `
-              <input type="text" list="allHeroesDatalist" placeholder="Enemy Hero ${i + 1}" value="${escapeHtml(tcEnemies[i])}" oninput="updateTcEnemy(${i}, this.value)" />
-            `).join('')}
+          <div class="tc-subtabs">
+            <button class="tc-subtab ${tcSubMode === 'enemy' ? 'active' : ''}" onclick="switchTcSubMode('enemy')">⚔️ Counter Enemy</button>
+            <button class="tc-subtab ${tcSubMode === 'builder' ? 'active' : ''}" onclick="switchTcSubMode('builder')">🛡️ My Team Builder</button>
           </div>
+          <p style="font-size:0.78rem; color:var(--muted);">
+            ${tcSubMode === 'enemy' ? `Enter up to 5 enemy ${unitPlural} to find counters & warnings:` : `Enter up to 5 allied ${unitPlural} to check synergies & big enemies:`}
+          </p>
+          <div class="tc-inputs">${slotsHtml}</div>
         </div>
         <div id="tcResults"></div>`;
       renderTeamCheckResults();
       return;
     }
 
-    if (viewMode === 'faction') {
+    if (viewMode === 'group') {
       let list;
-      if (activeFaction === 'All') list = [...heroes];
-      else if (activeFaction === 'Favorites') list = heroes.filter(h => h.fav);
-      else list = heroes.filter(h => h.faction === activeFaction);
+      if (activeGroup === 'All') list = [...listAll];
+      else if (activeGroup === 'Favorites') list = listAll.filter(x => x.fav);
+      else list = listAll.filter(x => x.faction === activeGroup);
 
       list.sort((a, b) => (b.fav ? 1 : 0) - (a.fav ? 1 : 0) || a.name.localeCompare(b.name));
-      const fColor = activeFaction === 'Favorites' ? '#f59e0b' : (activeFaction === 'All' ? '#f8fafc' : getFactionColor(activeFaction));
-      const titleText = activeFaction === 'Favorites' ? '⭐ My Core Heroes' : activeFaction;
+      const gColor = activeGroup === 'Favorites' ? '#f59e0b' : (activeGroup === 'All' ? '#f8fafc' : getGroupColor(activeGroup));
+      const titleText = activeGroup === 'Favorites' ? `⭐ Core ${entityMode === 'heroes' ? 'Heroes' : 'Titans'}` : activeGroup;
 
       container.innerHTML = `
         <div class="nav-bar">
-          <button class="back-btn" onclick="goHome()">← Factions</button>
-          <span style="font-size:0.8rem; color:var(--muted);">${list.length} heroes</span>
+          <button class="back-btn" onclick="goHome()">← ${groupWord}</button>
+          <span style="font-size:0.8rem; color:var(--muted);">${list.length} ${unitPlural}</span>
         </div>
-        <div class="section-header"><h2 style="color:${fColor}">${escapeHtml(titleText)}</h2></div>
-        ${list.length === 0 ? '<div style="text-align:center; color:var(--muted); padding:30px;">No heroes here yet. Open any hero and tap ☆ to star your favorites!</div>' : `
+        <div class="section-header"><h2 style="color:${gColor}">${escapeHtml(titleText)}</h2></div>
+        ${list.length === 0 ? `<div style="text-align:center; color:var(--muted); padding:30px;">No ${unitPlural} here yet. Open any entry and tap ☆ to star your favorites!</div>` : `
           <div class="hero-grid">
-            ${list.map(h => `
-              <div class="hero-item" onclick="openHeroDetail('${h.id}')">
-                <span class="hero-item-name" style="color:${getFactionColor(h.faction)}">${escapeHtml(h.name)}</span>
+            ${list.map(x => `
+              <div class="hero-item" onclick="openDetail('${x.id}')">
+                <span class="hero-item-name" style="color:${getGroupColor(x.faction)}">${escapeHtml(x.name)}</span>
                 <div class="hero-badges">
-                  ${h.fav ? '<span class="star-mini">⭐</span>' : ''}
-                  ${hasNotes(h) ? '<span class="note-dot"></span>' : ''}
+                  ${x.fav ? '<span class="star-mini">⭐</span>' : ''}
+                  ${hasNotes(x) ? '<span class="note-dot"></span>' : ''}
                 </div>
-              </div>
-            `).join('')}
+              </div>`).join('')}
           </div>`}`;
       return;
     }
 
     if (viewMode === 'detail') {
-      const h = heroes.find(x => x.id === activeHeroId);
-      if (!h) { goHome(); return; }
-      const fColor = getFactionColor(h.faction);
-      const backLinks = getLinkedMentions(h);
+      const item = listAll.find(x => x.id === activeEntryId);
+      if (!item) { goHome(); return; }
+      const gColor = getGroupColor(item.faction);
+      const backLinks = getLinkedMentions(item);
+      const subSuffix = entityMode === 'heroes' ? 'Faction' : 'Element';
 
       container.innerHTML = `
         <div class="nav-bar">
-          <button class="back-btn" onclick="openFaction('${h.faction}')">← ${escapeHtml(h.faction)}</button>
+          <button class="back-btn" onclick="openGroup('${item.faction}')">← ${escapeHtml(item.faction)}</button>
           <div style="display:flex; gap:6px;">
-            <button class="btn-small" style="color:#93c5fd;" onclick="openHeroModal('${h.id}')">Edit</button>
-            <button class="btn-small" style="color:#f87171;" onclick="deleteHero('${h.id}')">Delete</button>
+            <button class="btn-small" style="color:#93c5fd;" onclick="openEntryModal('${item.id}')">Edit</button>
+            <button class="btn-small" style="color:#f87171;" onclick="deleteEntry('${item.id}')">Delete</button>
           </div>
         </div>
         <div class="detail-card">
           <div class="detail-top">
             <div>
-              <div class="detail-hero-name" style="color:${fColor}">${escapeHtml(h.name)}</div>
-              <div class="detail-faction-label">${escapeHtml(h.faction)} Faction</div>
+              <div class="detail-hero-name" style="color:${gColor}">${escapeHtml(item.name)}</div>
+              <div class="detail-faction-label">${escapeHtml(item.faction)} ${subSuffix}</div>
             </div>
-            <button class="star-toggle" onclick="toggleFav('${h.id}')" title="Favorite / Core Hero">${h.fav ? '⭐' : '☆'}</button>
+            <button class="star-toggle" onclick="toggleFav('${item.id}')" title="Favorite">${item.fav ? '⭐' : '☆'}</button>
           </div>
-          <div class="info-block">
-            <div class="info-label">🤝 Synergies</div>
-            <div class="info-content">${linkifyHeroes(h.synergy, h.id)}</div>
-          </div>
-          <div class="info-block">
-            <div class="info-label">⚔️ Strong Against</div>
-            <div class="info-content">${linkifyHeroes(h.strong, h.id)}</div>
-          </div>
-          <div class="info-block">
-            <div class="info-label">🛡️ Counters / Weak Against</div>
-            <div class="info-content">${linkifyHeroes(h.counter, h.id)}</div>
-          </div>
-          <div class="info-block">
-            <div class="info-label">📝 Notes</div>
-            <div class="info-content">${linkifyHeroes(h.notes, h.id)}</div>
-          </div>
+          <div class="info-block"><div class="info-label">🤝 Synergies</div><div class="info-content">${linkify(item.synergy, item.id)}</div></div>
+          <div class="info-block"><div class="info-label">⚔️ Strong Against</div><div class="info-content">${linkify(item.strong, item.id)}</div></div>
+          <div class="info-block"><div class="info-label">🛡️ Counters / Weak Against</div><div class="info-content">${linkify(item.counter, item.id)}</div></div>
+          <div class="info-block"><div class="info-label">📝 Notes</div><div class="info-content">${linkify(item.notes, item.id)}</div></div>
           ${backLinks.length > 0 ? `
             <div class="info-block">
-              <div class="info-label">🔗 Linked From Other Heroes</div>
+              <div class="info-label">🔗 Linked From Other ${entityMode === 'heroes' ? 'Heroes' : 'Titans'}</div>
               <div class="info-content">${backLinks.map(l => `
                 <div class="backlink-row">
-                  <span class="hero-link" style="color:${getFactionColor(l.hero.faction)}" onclick="openHeroDetail('${l.hero.id}')">${escapeHtml(l.hero.name)}</span>
+                  <span class="hero-link" style="color:${getGroupColor(l.item.faction)}" onclick="openDetail('${l.item.id}')">${escapeHtml(l.item.name)}</span>
                   <span class="backlink-tag"> — ${escapeHtml(l.label)}</span>
                 </div>`).join('')}
               </div>
@@ -542,66 +624,73 @@
     }
   }
 
-  function openHeroModal(id = null) {
-    document.getElementById('heroForm').reset();
+  function openEntryModal(id = null) {
+    document.getElementById('entryForm').reset();
+    const groups = getActiveGroups();
+    document.getElementById('groupInput').innerHTML = groups.map(g => `<option value="${g.id}">${g.id}</option>`).join('');
+    document.getElementById('nameLabel').textContent = entityMode === 'heroes' ? 'Hero Name' : 'Titan Name';
+    document.getElementById('groupLabel').textContent = entityMode === 'heroes' ? 'Faction' : 'Element';
+
     if (id) {
-      const h = heroes.find(x => x.id === id);
-      if (!h) return;
-      document.getElementById('modalTitle').textContent = 'Edit Hero';
-      document.getElementById('editHeroId').value = h.id;
-      document.getElementById('heroNameInput').value = h.name;
-      document.getElementById('heroFactionInput').value = h.faction;
-      document.getElementById('heroSynergyInput').value = h.synergy || '';
-      document.getElementById('heroStrongInput').value = h.strong || '';
-      document.getElementById('heroCounterInput').value = h.counter || '';
-      document.getElementById('heroNotesInput').value = h.notes || '';
+      const item = getActiveList().find(x => x.id === id);
+      if (!item) return;
+      document.getElementById('modalTitle').textContent = entityMode === 'heroes' ? 'Edit Hero' : 'Edit Titan';
+      document.getElementById('editId').value = item.id;
+      document.getElementById('nameInput').value = item.name;
+      document.getElementById('groupInput').value = item.faction;
+      document.getElementById('synergyInput').value = item.synergy || '';
+      document.getElementById('strongInput').value = item.strong || '';
+      document.getElementById('counterInput').value = item.counter || '';
+      document.getElementById('notesInput').value = item.notes || '';
     } else {
-      document.getElementById('modalTitle').textContent = 'Add New Hero';
-      document.getElementById('editHeroId').value = '';
-      if (viewMode === 'faction' && activeFaction !== 'All' && activeFaction !== 'Favorites') {
-        document.getElementById('heroFactionInput').value = activeFaction;
+      document.getElementById('modalTitle').textContent = entityMode === 'heroes' ? 'Add New Hero' : 'Add New Titan';
+      document.getElementById('editId').value = '';
+      if (viewMode === 'group' && activeGroup !== 'All' && activeGroup !== 'Favorites') {
+        document.getElementById('groupInput').value = activeGroup;
       }
     }
-    document.getElementById('heroModal').classList.add('open');
+    document.getElementById('entryModal').classList.add('open');
   }
-  function closeModal() { document.getElementById('heroModal').classList.remove('open'); }
-  function saveHero(e) {
+  function closeModal() { document.getElementById('entryModal').classList.remove('open'); }
+  function saveEntry(e) {
     e.preventDefault();
-    const id = document.getElementById('editHeroId').value;
-    const existing = id ? heroes.find(x => x.id === id) : null;
+    const id = document.getElementById('editId').value;
+    const list = getActiveList();
+    const existing = id ? list.find(x => x.id === id) : null;
     const obj = {
-      id: id || 'h_' + Date.now(),
-      name: document.getElementById('heroNameInput').value.trim(),
-      faction: document.getElementById('heroFactionInput').value,
+      id: id || (entityMode === 'heroes' ? 'h_' : 't_') + Date.now(),
+      name: document.getElementById('nameInput').value.trim(),
+      faction: document.getElementById('groupInput').value,
       fav: existing ? Boolean(existing.fav) : false,
-      synergy: document.getElementById('heroSynergyInput').value.trim(),
-      strong: document.getElementById('heroStrongInput').value.trim(),
-      counter: document.getElementById('heroCounterInput').value.trim(),
-      notes: document.getElementById('heroNotesInput').value.trim()
+      synergy: document.getElementById('synergyInput').value.trim(),
+      strong: document.getElementById('strongInput').value.trim(),
+      counter: document.getElementById('counterInput').value.trim(),
+      notes: document.getElementById('notesInput').value.trim()
     };
     if (id) {
-      const idx = heroes.findIndex(x => x.id === id);
-      if (idx !== -1) heroes[idx] = obj;
-      activeHeroId = id;
-      viewMode = 'detail';
+      const idx = list.findIndex(x => x.id === id);
+      if (idx !== -1) list[idx] = obj;
     } else {
-      heroes.push(obj);
-      activeHeroId = obj.id;
-      viewMode = 'detail';
+      list.push(obj);
     }
-    saveCodex();
+    activeEntryId = obj.id;
+    viewMode = 'detail';
+    saveCurrent();
     closeModal();
   }
-  function deleteHero(id) {
-    const h = heroes.find(x => x.id === id);
-    if (h && confirm(`Delete ${h.name} from Codex?`)) {
-      heroes = heroes.filter(x => x.id !== id);
-      openFaction(h.faction);
-      saveCodex();
+  function deleteEntry(id) {
+    const list = getActiveList();
+    const item = list.find(x => x.id === id);
+    if (item && confirm(`Delete ${item.name} from Codex?`)) {
+      if (entityMode === 'heroes') heroes = heroes.filter(x => x.id !== id);
+      else titans = titans.filter(x => x.id !== id);
+      openGroup(item.faction);
+      saveCurrent();
     }
   }
   function exportJSON() {
-    const blob = new Blob([JSON.stringify(heroes, null, 2)], { type: 'application/json' });
+    const payload = { heroes, titans };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'gaben-codex-backup.json'; a.click();
   }
   function importJSON(e) {
@@ -610,15 +699,21 @@
     r.onload = ev => {
       try {
         const imp = JSON.parse(ev.target.result);
-        if (Array.isArray(imp) && confirm(`Import ${imp.length} heroes? This replaces current Codex.`)) {
-          heroes = imp; saveCodex(); goHome();
+        if (Array.isArray(imp) && confirm(`Import ${imp.length} heroes?`)) {
+          heroes = imp; localStorage.setItem(HEROES_KEY, JSON.stringify(heroes)); updateDatalist(); goHome();
+        } else if (imp && (Array.isArray(imp.heroes) || Array.isArray(imp.titans))) {
+          if (confirm(`Import ${(imp.heroes||[]).length} heroes and ${(imp.titans||[]).length} titans?`)) {
+            if (Array.isArray(imp.heroes)) { heroes = imp.heroes; localStorage.setItem(HEROES_KEY, JSON.stringify(heroes)); }
+            if (Array.isArray(imp.titans)) { titans = imp.titans; localStorage.setItem(TITANS_KEY, JSON.stringify(titans)); }
+            updateDatalist(); goHome();
+          }
         }
       } catch { alert('Invalid backup file.'); }
       e.target.value = '';
     };
     r.readAsText(f);
   }
-  updateHeroDatalist(); render();
+  updateDatalist(); render();
 </script>
 </body>
 </html>
