@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#0f172a" />
+  <title>Gaben Codex</title>
+  <link rel="icon" type="image/jpeg" href="ikon.jpg" />
+  <link rel="apple-touch-icon" href="ikon.jpg" />
+  <style>
+    :root {
+      --bg: #0f172a; --card: #1e293b; --border: #334155; --input: #0f172a;
+      --text: #f8fafc; --muted: #94a3b8; --primary: #3b82f6;
+      --eternity: #c4b5fd; --nature: #4ade80; --honor: #bae6fd;
+      --chaos: #fb7185; --progress: #38bdf8; --mystery: #e879f9;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg); color: var(--text); padding-bottom: 85px; }
+    .container { max-width: 600px; margin: 0 auto; padding: 14px; }
+    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .app-title { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+    .app-title img { width: 38px; height: 38px; border-radius: 10px; object-fit: cover; border: 1px solid var(--border); }
+    .title-text h1 { font-size: 1.15rem; font-weight: 800; line-height: 1.1; }
+    .guild-subtitle { font-size: 0.75rem; color: #f59e0b; font-weight: 700; margin-top: 2px; }
+    .backup-btns { display: flex; gap: 5px; }
+    .btn-small { background: var(--card); color: var(--muted); border: 1px solid var(--border); padding: 6px 9px; border-radius: 8px; font-size: 0.72rem; font-weight: 600; cursor: pointer; }
+    .search-box { position: relative; margin-bottom: 14px; }
+    .search-box input { width: 100%; background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 11px 36px 11px 14px; border-radius: 10px; font-size: 0.95rem; outline: none; }
+    .clear-search { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--muted); font-size: 1.1rem; cursor: pointer; display: none; }
+    .all-factions-btn { width: 100%; background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 14px; border-radius: 12px; font-size: 1rem; font-weight: 700; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; cursor: pointer; }
+    .faction-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .faction-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px 14px; cursor: pointer; display: flex; flex-direction: column; justify-content: space-between; min-height: 86px; }
+    .faction-name { font-size: 1.05rem; font-weight: 800; display: flex; align-items: center; gap: 6px; }
+    .faction-count { font-size: 0.78rem; color: var(--muted); margin-top: 6px; font-weight: 600; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .back-btn { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 7px 12px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer; }
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .section-header h2 { font-size: 1.2rem; font-weight: 800; }
+    .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .hero-item { background: var(--card); border: 1px solid var(--border); border-radius: 11px; padding: 12px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+    .hero-item-name { font-weight: 700; font-size: 0.94rem; }
+    .note-dot { width: 8px; height: 8px; border-radius: 50%; background: #10b981; flex-shrink: 0; }
+    .detail-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; }
+    .detail-top { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 14px; }
+    .detail-hero-name { font-size: 1.35rem; font-weight: 800; }
+    .detail-faction-label { font-size: 0.78rem; color: var(--muted); margin-top: 2px; font-weight: 600; }
+    .info-block { margin-bottom: 14px; }
+    .info-block:last-child { margin-bottom: 0; }
+    .info-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); font-weight: 700; margin-bottom: 5px; }
+    .info-content { background: rgba(15, 23, 42, 0.55); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; font-size: 0.9rem; color: #e2e8f0; line-height: 1.5; white-space: pre-wrap; min-height: 40px; }
+    .info-empty { color: #64748b; font-style: italic; }
+    .hero-link { color: #60a5fa; font-weight: 700; text-decoration: underline; cursor: pointer; }
+    .fab { position: fixed; bottom: 20px; right: 20px; left: 20px; max-width: 560px; margin: 0 auto; background: var(--primary); color: #fff; border: none; padding: 14px; border-radius: 14px; font-size: 1rem; font-weight: 700; box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.4); cursor: pointer; z-index: 10; }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.82); display: none; justify-content: center; align-items: flex-start; overflow-y: auto; padding: 12px; z-index: 50; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: var(--card); border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 560px; padding: 16px; margin-bottom: 30px; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .close-modal { background: none; border: none; color: var(--muted); font-size: 1.5rem; cursor: pointer; }
+    .form-group { margin-bottom: 12px; }
+    label { display: block; font-size: 0.78rem; color: var(--muted); margin-bottom: 4px; font-weight: 600; }
+    input[type="text"], select, textarea { width: 100%; background: var(--input); border: 1px solid var(--border); color: var(--text); padding: 10px; border-radius: 8px; font-size: 0.92rem; outline: none; font-family: inherit; }
+    textarea { min-height: 70px; resize: vertical; }
+    .save-btn { width: 100%; background: #10b981; color: #052e16; border: none; padding: 13px; border-radius: 10px; font-size: 1rem; font-weight: 800; cursor: pointer; margin-top: 6px; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="app-title" onclick="goHome()">
+      <img src="ikon.jpg" alt="Icon" onerror="this.style.display='none'" />
+      <div class="title-text">
+        <h1>Gaben Codex</h1>
+        <div class="guild-subtitle">⚔️ Chilligan's Tavern</div>
+      </div>
+    </div>
+    <div class="backup-btns">
+      <button class="btn-small" onclick="exportJSON()">Export</button>
+      <button class="btn-small" onclick="document.getElementById('importFile').click()">Import</button>
+      <input type="file" id="importFile" accept=".json" style="display:none" onchange="importJSON(event)" />
+    </div>
+  </header>
+
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search hero, synergy or counter..." oninput="handleSearch()" />
+    <button class="clear-search" id="clearSearchBtn" onclick="clearSearch()">✕</button>
+  </div>
+
+  <div id="mainView"></div>
+</div>
+
+<button class="fab" onclick="openHeroModal()">+ Add Hero</button>
+
+<div class="modal-overlay" id="heroModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modalTitle">Edit Hero</h2>
+      <button class="close-modal" onclick="closeModal()">✕</button>
+    </div>
+    <form id="heroForm" onsubmit="saveHero(event)">
+      <input type="hidden" id="editHeroId" />
+      <div class="form-group">
+        <label>Hero Name</label>
+        <input type="text" id="heroNameInput" placeholder="e.g. Guus" required />
+      </div>
+      <div class="form-group">
+        <label>Faction</label>
+        <select id="heroFactionInput" required>
+          <option value="Eternity">Eternity</option>
+          <option value="Nature">Nature</option>
+          <option value="Honor">Honor</option>
+          <option value="Chaos">Chaos</option>
+          <option value="Progress">Progress</option>
+          <option value="Mystery">Mystery</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>🤝 Synergies (Works well with)</label>
+        <textarea id="heroSynergyInput" placeholder="e.g. Soleil, Fafnir, Tristan..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>⚔️ Strong Against (Counters)</label>
+        <textarea id="heroStrongInput" placeholder="Who does this hero beat?"></textarea>
+      </div>
+      <div class="form-group">
+        <label>🛡️ Counters / Weak Against</label>
+        <textarea id="heroCounterInput" placeholder="Who beats this hero?"></textarea>
+      </div>
+      <div class="form-group">
+        <label>📝 Notes (Skins, Artifacts, Tips)</label>
+        <textarea id="heroNotesInput" placeholder="Optional build notes..."></textarea>
+      </div>
+      <button type="submit" class="save-btn">Save Hero</button>
+    </form>
+  </div>
+</div>
+<script>
+  const CODEX_KEY = 'gaben_codex_v1';
+  const FACTIONS = [
+    { id: 'Eternity', icon: '☥', color: '#c4b5fd' },
+    { id: 'Nature',   icon: '🍃', color: '#4ade80' },
+    { id: 'Honor',    icon: '🪽', color: '#bae6fd' },
+    { id: 'Chaos',    icon: '👹', color: '#fb7185' },
+    { id: 'Progress', icon: '⚙️', color: '#38bdf8' },
+    { id: 'Mystery',  icon: '🔥', color: '#e879f9' }
+  ];
+
+  const DEFAULT_HEROES = [
+    // Eternity
+    { name: 'Iris', faction: 'Eternity' }, { name: 'Electra von Grave', faction: 'Eternity' },
+    { name: 'Tempus', faction: 'Eternity' }, { name: 'Drayne', faction: 'Eternity' },
+    { name: 'Dante', faction: 'Eternity' }, { name: 'Octavia', faction: 'Eternity' },
+    { name: 'Phobos', faction: 'Eternity' }, { name: 'Faceless', faction: 'Eternity' },
+    { name: 'Corvus', faction: 'Eternity' }, { name: 'Morrigan', faction: 'Eternity' },
+    // Nature
+    { name: 'Byrna', faction: 'Nature' }, { name: 'Yasmine', faction: 'Nature' },
+    { name: 'Leonel', faction: 'Nature' }, { name: 'Mushy and Shroom', faction: 'Nature' },
+    { name: 'Wodryn', faction: 'Nature' }, { name: 'Oya', faction: 'Nature' },
+    { name: 'Alvanor', faction: 'Nature' }, { name: 'Mojo', faction: 'Nature' },
+    { name: 'Maya', faction: 'Nature' }, { name: 'Aurora', faction: 'Nature' },
+    // Honor
+    { name: 'Crow', faction: 'Honor' }, { name: 'Soleil', faction: 'Honor' },
+    { name: 'Guus', faction: 'Honor' }, { name: 'Artemis', faction: 'Honor' },
+    { name: 'Qing Mao', faction: 'Honor' }, { name: 'Fafnir', faction: 'Honor' },
+    { name: 'Galahad', faction: 'Honor' }, { name: 'Tristan', faction: 'Honor' },
+    { name: 'Markus', faction: 'Honor' }, { name: 'Luther', faction: 'Honor' },
+    // Chaos
+    { name: 'Peech', faction: 'Chaos' }, { name: 'Aidan', faction: 'Chaos' },
+    { name: 'Cleaver', faction: 'Chaos' }, { name: 'Astaroth', faction: 'Chaos' },
+    { name: 'Jorgen', faction: 'Chaos' }, { name: 'Kayla', faction: 'Chaos' },
+    { name: 'Dorian', faction: 'Chaos' }, { name: "Xe'Sha", faction: 'Chaos' },
+    { name: 'Lilith', faction: 'Chaos' }, { name: 'Kai', faction: 'Chaos' },
+    // Progress
+    { name: 'Nebula', faction: 'Progress' }, { name: 'Julius', faction: 'Progress' },
+    { name: 'Polaris', faction: 'Progress' }, { name: 'Orion', faction: 'Progress' },
+    { name: 'Eva', faction: 'Progress' }, { name: 'Judge', faction: 'Progress' },
+    { name: 'Sebastian', faction: 'Progress' }, { name: 'Isaac', faction: 'Progress' },
+    { name: 'Astrid and Lucas', faction: 'Progress' }, { name: 'Arachne', faction: 'Progress' },
+    // Mystery
+    { name: 'Folio', faction: 'Mystery' }, { name: 'Miu', faction: 'Mystery' },
+    { name: 'Satori', faction: 'Mystery' }, { name: 'Somna', faction: 'Mystery' },
+    { name: 'Cascade', faction: 'Mystery' }, { name: 'Amira', faction: 'Mystery' },
+    { name: 'Heidi', faction: 'Mystery' }, { name: 'Andvari', faction: 'Mystery' },
+    { name: 'Martha', faction: 'Mystery' }, { name: 'Rufus', faction: 'Mystery' }
+  ];
+
+  let heroes = JSON.parse(localStorage.getItem(CODEX_KEY) || 'null');
+  if (!heroes) {
+    heroes = DEFAULT_HEROES.map((h, idx) => ({
+      id: 'h_' + (idx + 1),
+      name: h.name,
+      faction: h.faction,
+      synergy: '',
+      strong: '',
+      counter: '',
+      notes: ''
+    }));
+    localStorage.setItem(CODEX_KEY, JSON.stringify(heroes));
+  }
+
+  let viewMode = 'home'; // 'home' | 'faction' | 'detail'
+  let activeFaction = 'All';
+  let activeHeroId = null;
+
+  function saveCodex() {
+    localStorage.setItem(CODEX_KEY, JSON.stringify(heroes));
+    render();
+  }
+  function getFactionColor(fName) {
+    const f = FACTIONS.find(x => x.id === fName);
+    return f ? f.color : '#f8fafc';
+  }
+  function escapeHtml(s) {
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function linkifyHeroes(text, currentHeroId) {
+    if (!text || !text.trim()) return `<span class="info-empty">No notes added yet. Tap Edit to add.</span>`;
+    let safe = escapeHtml(text);
+    const sorted = [...heroes].filter(h => h.id !== currentHeroId).sort((a, b) => b.name.length - a.name.length);
+    sorted.forEach(h => {
+      const escName = escapeHtml(h.name).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const regex = new RegExp(`\\b(${escName})\\b`, 'gi');
+      safe = safe.replace(regex, `<span class="hero-link" style="color:${getFactionColor(h.faction)}" onclick="openHeroDetail('${h.id}')">$1</span>`);
+    });
+    return safe;
+  }
+  function goHome() {
+    viewMode = 'home';
+    activeHeroId = null;
+    document.getElementById('searchInput').value = '';
+    document.getElementById('clearSearchBtn').style.display = 'none';
+    render();
+  }
+  function openFaction(fName) {
+    viewMode = 'faction';
+    activeFaction = fName;
+    activeHeroId = null;
+    render();
+  }
+  function openHeroDetail(id) {
+    viewMode = 'detail';
+    activeHeroId = id;
+    document.getElementById('searchInput').value = '';
+    document.getElementById('clearSearchBtn').style.display = 'none';
+    render();
+    window.scrollTo(0, 0);
+  }
+  function handleSearch() {
+    const v = document.getElementById('searchInput').value;
+    document.getElementById('clearSearchBtn').style.display = v ? 'block' : 'none';
+    render();
+  }
+  function clearSearch() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('clearSearchBtn').style.display = 'none';
+    render();
+  }
+  function hasNotes(h) {
+    return Boolean((h.synergy && h.synergy.trim()) || (h.strong && h.strong.trim()) || (h.counter && h.counter.trim()) || (h.notes && h.notes.trim()));
+  }
+  function render() {
+    const container = document.getElementById('mainView');
+    const q = document.getElementById('searchInput').value.trim().toLowerCase();
+
+    if (q) {
+      const matches = heroes.filter(h =>
+        [h.name, h.faction, h.synergy, h.strong, h.counter, h.notes].join(' ').toLowerCase().includes(q)
+      ).sort((a, b) => a.name.localeCompare(b.name));
+
+      container.innerHTML = `
+        <div class="section-header"><h2>Search Results (${matches.length})</h2></div>
+        <div class="hero-grid">
+          ${matches.map(h => `
+            <div class="hero-item" onclick="openHeroDetail('${h.id}')">
+              <span class="hero-item-name" style="color:${getFactionColor(h.faction)}">${escapeHtml(h.name)}</span>
+              ${hasNotes(h) ? '<span class="note-dot"></span>' : ''}
+            </div>
+          `).join('')}
+        </div>`;
+      return;
+    }
+
+    if (viewMode === 'home') {
+      container.innerHTML = `
+        <button class="all-factions-btn" onclick="openFaction('All')">
+          <span>▦ All Factions</span>
+          <span style="color:var(--muted); font-size:0.85rem;">${heroes.length} heroes ›</span>
+        </button>
+        <div class="faction-grid">
+          ${FACTIONS.map(f => {
+            const count = heroes.filter(h => h.faction === f.id).length;
+            return `
+              <div class="faction-card" style="border-color:${f.color}44" onclick="openFaction('${f.id}')">
+                <div class="faction-name" style="color:${f.color}">${f.icon} ${f.id}</div>
+                <div class="faction-count">${count} heroes</div>
+              </div>`;
+          }).join('')}
+        </div>`;
+      return;
+    }
+
+    if (viewMode === 'faction') {
+      const list = (activeFaction === 'All' ? heroes : heroes.filter(h => h.faction === activeFaction))
+        .slice().sort((a, b) => a.name.localeCompare(b.name));
+      const fColor = activeFaction === 'All' ? '#f8fafc' : getFactionColor(activeFaction);
+      container.innerHTML = `
+        <div class="nav-bar">
+          <button class="back-btn" onclick="goHome()">← Factions</button>
+          <span style="font-size:0.8rem; color:var(--muted);">${list.length} heroes</span>
+        </div>
+        <div class="section-header"><h2 style="color:${fColor}">${escapeHtml(activeFaction)}</h2></div>
+        <div class="hero-grid">
+          ${list.map(h => `
+            <div class="hero-item" onclick="openHeroDetail('${h.id}')">
+              <span class="hero-item-name" style="color:${getFactionColor(h.faction)}">${escapeHtml(h.name)}</span>
+              ${hasNotes(h) ? '<span class="note-dot" title="Has notes"></span>' : ''}
+            </div>
+          `).join('')}
+        </div>`;
+      return;
+    }
+
+    if (viewMode === 'detail') {
+      const h = heroes.find(x => x.id === activeHeroId);
+      if (!h) { goHome(); return; }
+      const fColor = getFactionColor(h.faction);
+      container.innerHTML = `
+        <div class="nav-bar">
+          <button class="back-btn" onclick="openFaction('${h.faction}')">← ${escapeHtml(h.faction)}</button>
+          <div style="display:flex; gap:6px;">
+            <button class="btn-small" style="color:#93c5fd;" onclick="openHeroModal('${h.id}')">Edit</button>
+            <button class="btn-small" style="color:#f87171;" onclick="deleteHero('${h.id}')">Delete</button>
+          </div>
+        </div>
+        <div class="detail-card">
+          <div class="detail-top">
+            <div>
+              <div class="detail-hero-name" style="color:${fColor}">${escapeHtml(h.name)}</div>
+              <div class="detail-faction-label">${escapeHtml(h.faction)} Faction</div>
+            </div>
+          </div>
+          <div class="info-block">
+            <div class="info-label">🤝 Synergies</div>
+            <div class="info-content">${linkifyHeroes(h.synergy, h.id)}</div>
+          </div>
+          <div class="info-block">
+            <div class="info-label">⚔️ Strong Against</div>
+            <div class="info-content">${linkifyHeroes(h.strong, h.id)}</div>
+          </div>
+          <div class="info-block">
+            <div class="info-label">🛡️ Counters / Weak Against</div>
+            <div class="info-content">${linkifyHeroes(h.counter, h.id)}</div>
+          </div>
+          <div class="info-block">
+            <div class="info-label">📝 Notes</div>
+            <div class="info-content">${linkifyHeroes(h.notes, h.id)}</div>
+          </div>
+        </div>`;
+    }
+  }
+
+  function openHeroModal(id = null) {
+    document.getElementById('heroForm').reset();
+    if (id) {
+      const h = heroes.find(x => x.id === id);
+      if (!h) return;
+      document.getElementById('modalTitle').textContent = 'Edit Hero';
+      document.getElementById('editHeroId').value = h.id;
+      document.getElementById('heroNameInput').value = h.name;
+      document.getElementById('heroFactionInput').value = h.faction;
+      document.getElementById('heroSynergyInput').value = h.synergy || '';
+      document.getElementById('heroStrongInput').value = h.strong || '';
+      document.getElementById('heroCounterInput').value = h.counter || '';
+      document.getElementById('heroNotesInput').value = h.notes || '';
+    } else {
+      document.getElementById('modalTitle').textContent = 'Add New Hero';
+      document.getElementById('editHeroId').value = '';
+      if (viewMode === 'faction' && activeFaction !== 'All') {
+        document.getElementById('heroFactionInput').value = activeFaction;
+      }
+    }
+    document.getElementById('heroModal').classList.add('open');
+  }
+  function closeModal() { document.getElementById('heroModal').classList.remove('open'); }
+  function saveHero(e) {
+    e.preventDefault();
+    const id = document.getElementById('editHeroId').value;
+    const obj = {
+      id: id || 'h_' + Date.now(),
+      name: document.getElementById('heroNameInput').value.trim(),
+      faction: document.getElementById('heroFactionInput').value,
+      synergy: document.getElementById('heroSynergyInput').value.trim(),
+      strong: document.getElementById('heroStrongInput').value.trim(),
+      counter: document.getElementById('heroCounterInput').value.trim(),
+      notes: document.getElementById('heroNotesInput').value.trim()
+    };
+    if (id) {
+      const idx = heroes.findIndex(x => x.id === id);
+      if (idx !== -1) heroes[idx] = obj;
+      activeHeroId = id;
+      viewMode = 'detail';
+    } else {
+      heroes.push(obj);
+      activeHeroId = obj.id;
+      viewMode = 'detail';
+    }
+    saveCodex();
+    closeModal();
+  }
+  function deleteHero(id) {
+    const h = heroes.find(x => x.id === id);
+    if (h && confirm(`Delete ${h.name} from Codex?`)) {
+      heroes = heroes.filter(x => x.id !== id);
+      openFaction(h.faction);
+      saveCodex();
+    }
+  }
+  function exportJSON() {
+    const blob = new Blob([JSON.stringify(heroes, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'gaben-codex-backup.json'; a.click();
+  }
+  function importJSON(e) {
+    const f = e.target.files[0]; if (!f) return;
+    const r = new FileReader();
+    r.onload = ev => {
+      try {
+        const imp = JSON.parse(ev.target.result);
+        if (Array.isArray(imp) && confirm(`Import ${imp.length} heroes? This replaces current Codex.`)) {
+          heroes = imp; saveCodex(); goHome();
+        }
+      } catch { alert('Invalid backup file.'); }
+      e.target.value = '';
+    };
+    r.readAsText(f);
+  }
+  render();
+</script>
+</body>
+</html>
